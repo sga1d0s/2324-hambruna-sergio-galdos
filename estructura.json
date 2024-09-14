@@ -1,0 +1,63 @@
+{
+  "items": {
+    "item": [
+      {
+        "id": "string",       // Identificador único del item
+        "type": "string",     // Tipo de producto (e.g., "donut")
+        "name": "string",     // Nombre del producto
+        "ppu": "number",      // Precio por unidad (ppu)
+        "batters": {          // Tipos de masas disponibles
+          "batter": [
+            {
+              "id": "string",   // Identificador de la masa
+              "type": "string"  // Tipo de masa (e.g., "Regular", "Chocolate")
+            }
+          ]
+        },
+        "topping": [          // Toppings disponibles
+          {
+            "id": "string",     // Identificador del topping
+            "type": "string"    // Tipo de topping (e.g., "None", "Glazed")
+          }
+        ],
+        "nutrition_facts": {   // Información nutricional
+          "nutrition": {
+            "calories": "number",    // Calorías del producto
+            "fat": {                 // Información sobre las grasas
+              "daily_value": "string", // Valor diario (%)
+              "fat_type": {             // Tipos de grasa
+                "saturated": "string",   // Grasas saturadas (g)
+                "trans": "string"        // Grasas trans (g)
+              }
+            },
+            "cholesterol": {           // Información sobre el colesterol
+              "daily_value": "string",   // Valor diario (%)
+              "amount": "string"         // Cantidad (mg)
+            },
+            "sodium": {                 // Información sobre el sodio
+              "daily_value": "string",   // Valor diario (%)
+              "amount": "string"         // Cantidad (mg)
+            },
+            "carbohydrate": {           // Información sobre los carbohidratos
+              "daily_value": "string",   // Valor diario (%)
+              "carbs_detail": {
+                "amount": "string",      // Cantidad de carbohidratos (g)
+                "type": {                // Tipos de carbohidratos
+                  "fibre": "string",     // Fibra dietética (g)
+                  "sugars": "string"     // Azúcares (g)
+                }
+              }
+            },
+            "proteine": "string",       // Cantidad de proteínas (g)
+            "vitamines": [              // Información sobre las vitaminas
+              {
+                "type": "string",        // Tipo de vitamina (e.g., "Vitamin A")
+                "percent": "string"      // Porcentaje de valor diario (%)
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
