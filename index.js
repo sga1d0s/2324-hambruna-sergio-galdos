@@ -1,6 +1,6 @@
 "use strict"
 
-// función asincrona para obtener datos desde URL
+// función async para obtener datos desde URL
 const getAllDonuts = async () => {
   // usar función fetch para realizar solicitud HTTP. Devuelve una promesa
   return fetch('https://gist.githubusercontent.com/Oskar-Dam/62e7175dc542af53a9d18cb292422425/raw/a6cce2b68ea13a77ec5ea7bdfb4df8f23f9ae95f/donuts.json')
@@ -8,10 +8,30 @@ const getAllDonuts = async () => {
     .then(response => response.json())
 }
 
-// funcion encontrar donut con más azucar toma array 'donuts' como parametro
-function findDonutMoreSugar(donuts){
-  // asignar a 'maxSugarDonut' el primer donut del array 'donuts'
-  let maxSugarDonut = donuts[0]
+// función async devolver array de objetos donuts
+const fetchAsyncData = async () => {
+  try {
+    // recibir datos llamando a función que devuelve promesa. Con await espera a que se resuelva la promesa
+    const data = await getAllDonuts()
+    // acceder a la propiedad items.item del json
+    const donuts = data.items.item
+    return donuts
+  }
+  catch (error) {
+    // mostrar error
+    console.log(error.message);
+  }
+}
+
+// ***** FASE 1 DEL CONJURO
+// funcion encontrar donut con más azucar, hierro, proteina y menos fibra. Toma array 'donuts' como parametro
+function findDonutMaxMin(donuts) {
+
+  // inicializar listas para almacenar los donuts con valores máximos y mínimos
+  let maxSugarDonuts = [donuts[0]]
+  let maxIronDonuts = [donuts[0]]
+  let maxProteinDonuts = [donuts[0]]
+  let minFibreDonuts = [donuts[0]]
 
   // iterar sobre el array
   for (let index = 0; index < donuts.length; index++) {
@@ -19,45 +39,218 @@ function findDonutMoreSugar(donuts){
     // asignar a 'currentDonut' el donut 'index' del array
     const currentDonut = donuts[index]
 
-    // asignar y parsear valor
+    // ----- AZUCAR
+    // obtener y parsear valor del AZUCAR del donut actual
     const currentSugar = parseFloat(currentDonut.nutrition_facts.nutrition.carbohydrate.carbs_detail.type.sugars)
-    const maxSugar = parseFloat(maxSugarDonut.nutrition_facts.nutrition.carbohydrate.carbs_detail.type.sugars)
-    
-    // comprobar la cantidad de azucar
+    const maxSugar = parseFloat(maxSugarDonuts[0].nutrition_facts.nutrition.carbohydrate.carbs_detail.type.sugars)
+
+    // comparar la cantidad de AZÚCAR
     if (currentSugar > maxSugar) {
-      // Actualizar el donut con más azúcar
-      maxSugarDonut = currentDonut;
+      // reemplazar la lista con nuevo máximo
+      maxSugarDonuts = [currentDonut]
+    } else if (currentSugar === maxSugar) {
+      // añadir a la lista valor igual al máximo
+      maxSugarDonuts.push(currentDonut)
+    }
+
+    // ----- HIERRO
+    // obtener y parsear valor del HIERRO del donut actual
+    const currentIron = parseFloat(currentDonut.nutrition_facts.nutrition.vitamines
+      .find(vitamines => vitamines.type === "Iron").percent)
+    const maxIron = parseFloat(maxIronDonuts[0].nutrition_facts.nutrition.vitamines
+      .find(vitamines => vitamines.type === "Iron").percent)
+
+    // comparar la cantidad de HIERRO
+    if (currentIron > maxIron) {
+      // reemplazar la lista con nuevo máximo
+      maxIronDonuts = [currentDonut]
+    } else if (currentIron === maxIron) {
+      // añadir a la lista valor igual al máximo
+      maxIronDonuts.push(currentDonut)
+    }
+
+    // ----- PROTEINAS
+    // obtener y parsear valor del PROTEINAS del donut actual
+    const currentProtein = parseFloat(currentDonut.nutrition_facts.nutrition.proteine)
+    const maxProtein = parseFloat(maxProteinDonuts[0].nutrition_facts.nutrition.proteine)
+
+    // comparar la cantidad de PROTEÍNAS
+    if (currentProtein > maxProtein) {
+      // reemplazar la lista con nuevo máximo
+      maxProteinDonuts = [currentDonut]
+      // añadir a la lista valor igual al máximo
+    } else if (currentProtein === maxProtein) {
+      maxProteinDonuts.push(currentDonut)
+    }
+
+    // ----- FIBRA
+    // obtener y parsear valor del FIBRA del donut actual
+    const currentFibre = parseFloat(currentDonut.nutrition_facts.nutrition.carbohydrate.carbs_detail.type.fibre)
+    const minFibre = parseFloat(minFibreDonuts[0].nutrition_facts.nutrition.carbohydrate.carbs_detail.type.fibre)
+
+    // comparar la cantidad de FIBRA
+    if (currentFibre < minFibre) {
+      // reemplazar la lista con nuevo máximo
+      minFibreDonuts = [currentDonut]
+      // añadir a la lista valor igual al máximo
+    } else if (currentFibre === minFibre) {
+      minFibreDonuts.push(currentDonut)
     }
   }
 
-  // Devolver el donut con más azúcar
-  return maxSugarDonut;
+  // devolver los datos en un objeto
+  return {
+    maxSugarDonuts,
+    maxIronDonuts,
+    maxProteinDonuts,
+    minFibreDonuts
+  }
 }
 
-// función asincrona para obtener datos
-const fetchAsyncData = async () => {
+// función para imprimir datos de donutsMaxMin
+function printFindDonutMaxMin(donuts) {
 
-  // manejo de herrores
+  // guardar en 'result' el return de 'findDonutMaxMin'
+  const result = findDonutMaxMin(donuts)
+
+  // manejo de errores. ¿¿¿NECESARIO???
   try {
+    // MOSTRAR DATOS EN PANTALLA
+    console.log('\n\n1.-  FASE 1 DEL CONJURO');
 
-    // recibir datos llamando a función que devuelve promesa. Con await espera a que se resuelva la promesa
-    const data = await getAllDonuts()
+    // AZUCAR
+    // comprobar cuantos resultados para elegir el texto
+    if (result.maxSugarDonuts.length > 1) {
+      console.log(`\n       Los donuts con más azucar son:`)
+    } else {
+      console.log(`\n       El donut con más azucar es:`)
+    }
+    // recorrer 'la lista result.maxSugarDonuts' y mostrar el dato .name del donut con más AZUCAR
+    result.maxSugarDonuts.forEach(donut => {
+      console.log(`         - ${donut.name}`);
+    })
 
-    // acceder a la propiedad items.item del json
-    const donuts = data.items.item
+    // HIERRO
+    // comprobar cuantos resultados para elegir el texto
+    if (result.maxIronDonuts.length > 1) {
+      console.log(`       Los donuts con más hierro son:`)
+    } else {
+      console.log(`       El donut con más hierro es:`)
+    }
+    // recorrer 'la lista result.maxIronDonuts' y mostrar el dato .name del donut con más HIERRO
+    result.maxIronDonuts.forEach(donut => {
+      console.log(`         - ${donut.name}`)
+    });
 
-    // llamar a funcion pasando array donuts como parametro y guardamos en 'donutMoreSugar'
-    const donutMoreSugar = findDonutMoreSugar(donuts)
+    // PROTEINA
+    // comprobar cuantos resultados para elegir el texto
+    if (result.maxProteinDonuts.length > 1) {
+      console.log(`       Los donuts con más proteina son:`)
+    } else {
+      console.log(`       El donut con más proteina es:`)
+    }
+    // recorrer 'la lista result.maxProteinDonuts' y mostrar el dato .name del donut con más PROTEINA
+    result.maxProteinDonuts.forEach(donut => {
+      console.log(`         - ${donut.name}`)
+    });
 
-    // pintamos el dato .name del donut con más azucar
-    console.log(`El donut con más azucar es ${donutMoreSugar.name}`);
+    // FIBRA
+    // comprobar cuantos resultados para elegir el texto
+    if (result.minFibreDonuts.length > 1) {
+      console.log(`       Los donuts con menos fibra son:`)
+    } else {
+      console.log(`       El donut con menos fibra es:`)
+    }
+    // recorrer 'la lista result.minFibreDonuts' y mostrar el dato .name del donut con más FIBRA
+    result.minFibreDonuts.forEach(donut => {
+      console.log(`         - ${donut.name}`)
+    });
 
-    // capturar el herror
+    // capturar el error
   } catch (error) {
-
-    // pintar herror
+    // mostrar error
     console.log(error.message);
   }
 }
 
-fetchAsyncData()
+// ***** FASE 2 DEL CONJURO
+// función para mostrar la información de calorias, grasas y carbohidratos
+function printCalFatCarb(donuts) {
+  // MOSTRAR DATOS EN PANTALLA
+  console.log('\n\n2.-  FASE 2 DEL CONJURO')
+
+  console.log('\n   Calorías y Carbohidratos de los donuts:')
+  donuts.forEach(donut => {
+    // mostrar DONUTS
+    console.log(`\n         Donut: ${donut.name}`)
+    // mostrar CALORÍAS
+    console.log(`           Calorías: ${donut.nutrition_facts.nutrition.carbohydrate.carbs_detail.amount}`)
+    // mostrar CARBOHIDRATOS
+    console.log(`           Carbohidratos: ${donut.nutrition_facts.nutrition.calories} kcal`)
+  })
+
+  // media calorias
+  let totalCal = 0
+  let totalSat = 0
+
+  donuts.forEach(donut => {
+    totalCal += parseFloat(donut.nutrition_facts.nutrition.calories)
+    totalSat += parseFloat(donut.nutrition_facts.nutrition.fat.fat_type.saturated)
+  })
+
+  // mostrar media calorias
+  const averageCal = totalCal / donuts.length
+
+  console.log('\n   La media de calorías de los donuts es:')
+  console.log(`       ${averageCal} kcal`);
+
+  // mostrar grasas saturadas
+  console.log('\n   La suma total de grasas saturadas es:');
+  console.log(`       ${totalSat} g`);
+
+  // media de vitaminas
+  const vitA = "Vitamin A";
+  const vitC = "Vitamin C";
+  const vitCal = "Calcium";
+  const vitIro = "Iron";
+
+  console.log('\n   El porcentaje medio de vitaminas es el siguiente:');
+
+  // calcular media vitaminas
+  function averageVitamin(vitamin) {
+    let totalPercent = 0
+
+    donuts.forEach(donut => {
+      const vitInfo = donut.nutrition_facts.nutrition.vitamines.find(vit => vit.type === vitamin)
+      totalPercent += parseFloat(vitInfo.percent);
+    })
+
+    const averagePercent = totalPercent / donuts.length
+
+    // mostrar vitaminas
+    console.log(`       ${(vitamin)}: ${averagePercent}%`);
+  }
+
+  averageVitamin(vitA)
+  averageVitamin(vitC)
+  averageVitamin(vitCal)
+  averageVitamin(vitIro)
+}
+
+
+// FUNCIÓN PRINCIPAL
+const main = async () => {
+
+  // guardar datos en donuts
+  const donuts = await fetchAsyncData()
+
+  // FASE 1
+  printFindDonutMaxMin(donuts)
+
+  // FASE 2
+  printCalFatCarb(donuts)
+
+}
+
+
+main()
