@@ -23,8 +23,8 @@ const fetchAsyncData = async () => {
   }
 }
 
-// ***** FASE 1 DEL CONJURO
-// funcion encontrar donut con más azucar, hierro, proteina y menos fibra. Toma array 'donuts' como parametro
+// ***** FASE 1 DEL CONJURO *****
+// encontrar donut con más azucar, hierro, proteina y menos fibra. Toma array 'donuts' como parametro
 function findDonutMaxMin(donuts) {
 
   // inicializar listas para almacenar los donuts con valores máximos y mínimos
@@ -107,13 +107,12 @@ function findDonutMaxMin(donuts) {
   }
 }
 
-// función para imprimir datos de donutsMaxMin
+// imprimir datos de donutsMaxMin
 function printFindDonutMaxMin(donuts) {
 
   // guardar en 'result' el return de 'findDonutMaxMin'
   const result = findDonutMaxMin(donuts)
 
-  // manejo de errores. ¿¿¿NECESARIO???
   try {
     // MOSTRAR DATOS EN PANTALLA
     console.log('\n\n1.-  FASE 1 DEL CONJURO');
@@ -173,8 +172,8 @@ function printFindDonutMaxMin(donuts) {
   }
 }
 
-// ***** FASE 2 DEL CONJURO
-// función para mostrar la información de calorias, grasas y carbohidratos
+// ***** FASE 2 DEL CONJURO *****
+// mostrar la información de calorias, grasas y carbohidratos
 function printCalFatCarb(donuts) {
   // MOSTRAR DATOS EN PANTALLA
   console.log('\n\n2.-  FASE 2 DEL CONJURO')
@@ -182,7 +181,7 @@ function printCalFatCarb(donuts) {
   console.log('\n   Calorías y Carbohidratos de los donuts:')
   donuts.forEach(donut => {
     // mostrar DONUTS
-    console.log(`\n         Donut: ${donut.name}`)
+    console.log(`\n       Donut: ${donut.name}`)
     // mostrar CALORÍAS
     console.log(`           Calorías: ${donut.nutrition_facts.nutrition.carbohydrate.carbs_detail.amount}`)
     // mostrar CARBOHIDRATOS
@@ -237,6 +236,43 @@ function printCalFatCarb(donuts) {
   averageVitamin(vitIro)
 }
 
+// ***** FASE 3 DEL CONJURO *****
+function listBatTop(donuts) {
+  // MOSTRAR DATOS EN PANTALLA
+  console.log('\n\n2.-  FASE 3 DEL CONJURO')
+  console.log('\n   Tipos de masa y toppings:')
+
+  // recorrer donuts para obtener 'donut.name'
+  donuts.forEach(donut => {
+    console.log(`\n       Donut: ${donut.name}`)
+    console.log(`           Masas:`)
+    // recorrer batter para obtener batter.type
+    donut.batters.batter.forEach(batter => console.log(`                - ${batter.type}`))
+    console.log(`           Toppings:`)
+    // recorrer toping para obtener toppynt.type
+    donut.topping.forEach(topping => console.log(`                - ${topping.type}`))
+  })
+}
+
+// ***** FASE 4 DEL CONJURO *****
+function calcPurchOpt(donuts) {
+  // MOSTRAR DATOS EN PANTALLA
+  console.log('\n\n2.-  FASE 3 DEL CONJURO')
+
+  console.log('\n   Donuts que se comprarán con 4 monedas de plata:')
+  // crear el array 'prices' desde donuts
+  const prices = donuts.map(donut => ({
+    name: donut.name,
+    ppu: donut.ppu
+  }))
+
+  // recorrer prices para calcular cantidades
+  prices.forEach(price => {
+    const quantity = Math.floor(4 / price.ppu)
+    const remainder = (4 - quantity * price.ppu).toFixed(2)
+    console.log(`       Puedes comprar ${quantity} donuts de ${price.name} con ${remainder} monedas sobrantes.`)
+  })
+}
 
 // FUNCIÓN PRINCIPAL
 const main = async () => {
@@ -250,7 +286,12 @@ const main = async () => {
   // FASE 2
   printCalFatCarb(donuts)
 
-}
+  // FASE 3
+  listBatTop(donuts)
 
+  // FASE 4
+  calcPurchOpt(donuts)
+
+}
 
 main()
