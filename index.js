@@ -177,8 +177,8 @@ function printFindDonutMaxMin(donuts) {
 function printCalFatCarb(donuts) {
   // MOSTRAR DATOS EN PANTALLA
   console.log('\n\n2.-  FASE 2 DEL CONJURO')
-
   console.log('\n   Calorías y Carbohidratos de los donuts:')
+
   donuts.forEach(donut => {
     // mostrar DONUTS
     console.log(`\n       Donut: ${donut.name}`)
@@ -208,10 +208,10 @@ function printCalFatCarb(donuts) {
   console.log(`       ${totalSat} g`);
 
   // media de vitaminas
-  const vitA = "Vitamin A";
-  const vitC = "Vitamin C";
-  const vitCal = "Calcium";
-  const vitIro = "Iron";
+  const vitA = "Vitamin A"
+  const vitC = "Vitamin C"
+  const vitCal = "Calcium"
+  const vitIro = "Iron"
 
   console.log('\n   El porcentaje medio de vitaminas es el siguiente:');
 
@@ -258,7 +258,6 @@ function listBatTop(donuts) {
 function calcPurchOpt(donuts) {
   // MOSTRAR DATOS EN PANTALLA
   console.log('\n\n2.-  FASE 3 DEL CONJURO')
-
   console.log('\n   Donuts que se comprarán con 4 monedas de plata:')
   // crear el array 'prices' desde donuts
   const prices = donuts.map(donut => ({
