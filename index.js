@@ -239,7 +239,7 @@ function printCalFatCarb(donuts) {
 // ***** FASE 3 DEL CONJURO *****
 function listBatTop(donuts) {
   // MOSTRAR DATOS EN PANTALLA
-  console.log('\n\n2.-  FASE 3 DEL CONJURO')
+  console.log('\n\n3.-  FASE 3 DEL CONJURO')
   console.log('\n   Tipos de masa y toppings:')
 
   // recorrer donuts para obtener 'donut.name'
@@ -257,7 +257,7 @@ function listBatTop(donuts) {
 // ***** FASE 4 DEL CONJURO *****
 function calcPurchOpt(donuts) {
   // MOSTRAR DATOS EN PANTALLA
-  console.log('\n\n2.-  FASE 3 DEL CONJURO')
+  console.log('\n\n4.-  FASE 4 DEL CONJURO')
   console.log('\n   Donuts que se comprarán con 4 monedas de plata:')
   // crear el array 'prices' desde donuts
   const prices = donuts.map(donut => ({
